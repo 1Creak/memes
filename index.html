@@ -108,56 +108,61 @@
     <div class="error-message" id="errorMessage">Шото хрень какая-то, либо это не ссылка либо я в коде что-то сломал. Напишите в тех поддержку, в телеграм Евгению</div>
   </div>
 
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const access = urlParams.get('access');
-    const linkInput = document.getElementById('user_link');
-    const successMessage = document.getElementById('successMessage');
-    const linkValue = linkInput.value.trim();
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const access = urlParams.get('access');
+  const linkInput = document.getElementById('user_link');
+  const successMessage = document.getElementById('successMessage');
+  const errorMessage = document.getElementById('errorMessage');
+  const form = document.getElementById('linkForm');
 
-    if (access !== 'modnik') {
-      document.body.style.backgroundImage = "url('https://i.gifer.com/1lwr.gif')";
-      document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;background-color: white;padding: 20px;border-radius: 48px;">Подозрительный ты тип</h1>';
+  if (access !== 'modnik') {
+    document.body.style.backgroundImage = "url('https://i.gifer.com/1lwr.gif')";
+    document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;background-color: white;padding: 20px;border-radius: 48px;">Подозрительный ты тип</h1>';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault(); 
+
+    successMessage.style.display = 'none';
+    errorMessage.style.display = 'none';
+
+    const linkValue = linkInput.value.trim().toLowerCase();
+
+    if (!linkValue.includes('instagram')) {
+      errorMessage.textContent = 'Шото хрень какая-то. Видео только с инсты';
+      errorMessage.style.display = 'block';
+      return;
     }
-    const form = document.getElementById('linkForm');
-    const successMessage = document.getElementById('successMessage');
-    const errorMessage = document.getElementById('errorMessage');
-        successMessage.style.display = 'block';
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!linkValue.includes('instagram')) {
-        e.preventDefault(); 
-        successMessage.textContent = 'Шото хрень какая-то. Видео только с инсты';
+    successMessage.textContent = 'Спасибо! Мем обрабатывается Евгением, ожидайте реакции в Телеграм';
+    successMessage.style.display = 'block';
 
-        return
-      }
-        successMessage.textContent = 'Спасибо! Мем обрабатывается Евгением, ожидайте реакции в Телеграм';
+    const formData = new FormData(form);
 
-      errorMessage.style.display = 'none';
-      
-      const formData = new FormData(form);
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json'
+        },
+        body: formData
+      });
 
-      try {
-        const response = await fetch(form.action, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json'
-          },
-          body: formData
-        });
-
-        if (response.ok) {
-          form.reset();
-          successMessage.style.display = 'block';
-        } else {
-          errorMessage.style.display = 'block';
-        }
-      } catch (error) {
+      if (response.ok) {
+        form.reset();
+      } else {
+        errorMessage.textContent = 'Ошибка отправки. Попробуйте позже.';
         errorMessage.style.display = 'block';
+        successMessage.style.display = 'none';
       }
-    });
+    } catch (error) {
+      errorMessage.textContent = 'Сервер недоступен. Попробуйте позже.';
+      errorMessage.style.display = 'block';
+      successMessage.style.display = 'none';
+    }
+  });
+</script>
 
-  </script>
 </body>
 </html>
