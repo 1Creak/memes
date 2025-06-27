@@ -112,7 +112,8 @@
     const access = urlParams.get('access');
 
     if (access !== 'modnik') {
-      document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%">Доступ запрещён</h1>';
+      document.body.style.backgroundImage = "url('https://i.gifer.com/1lwr.gif')";
+      document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;background-color: white;padding: 20px;border-radius: 48px;">Подозрительный ты тип</h1>';
     }
     const form = document.getElementById('linkForm');
     const successMessage = document.getElementById('successMessage');
