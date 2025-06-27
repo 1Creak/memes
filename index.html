@@ -98,6 +98,7 @@
         placeholder="Ссылку на мем сюда"
         required
         autocomplete="off"
+        id="user_link"
       />
       <input type="hidden" name="_subject" value="Новая ссылка с сайта" />
       <!-- <input type="hidden" name="_next" value="https://yourdomain.com/thankyou.html" /> -->
@@ -110,6 +111,9 @@
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const access = urlParams.get('access');
+    const linkInput = document.getElementById('user_link');
+    const successMessage = document.getElementById('successMessage');
+    const linkValue = linkInput.value.trim();
 
     if (access !== 'modnik') {
       document.body.style.backgroundImage = "url('https://i.gifer.com/1lwr.gif')";
@@ -118,13 +122,20 @@
     const form = document.getElementById('linkForm');
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
+        successMessage.style.display = 'block';
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (!linkValue.includes('instagram')) {
+        e.preventDefault(); 
+        successMessage.textContent = 'Шото хрень какая-то. Видео только с инсты';
 
-      successMessage.style.display = 'none';
+        return
+      }
+        successMessage.textContent = 'Спасибо! Мем обрабатывается Евгением, ожидайте реакции в Телеграм';
+
       errorMessage.style.display = 'none';
-
+      
       const formData = new FormData(form);
 
       try {
