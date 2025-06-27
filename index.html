@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Отправка ссылки</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0 15px;
+    }
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 25px;
+      color: #333;
+      font-weight: 700;
+      font-size: 24px;
+    }
+    input[type="url"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    input[type="url"]:focus {
+      border-color: #007BFF;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0,123,255,0.5);
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      padding: 12px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 100%;
+      font-weight: 600;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .success-message {
+      color: green;
+      margin-top: 15px;
+      font-weight: 600;
+      display: none;
+    }
+    .error-message {
+      color: red;
+      margin-top: 15px;
+      font-weight: 600;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Отправьте мне ссылку</h1>
+    <form id="linkForm" action="https://formspree.io/f/xkgbkglw" method="POST">
+      <input
+        type="url"
+        name="user_link"
+        placeholder="Вставьте ссылку"
+        required
+        autocomplete="off"
+      />
+      <input type="hidden" name="_subject" value="Новая ссылка с сайта" />
+      <!-- <input type="hidden" name="_next" value="https://yourdomain.com/thankyou.html" /> -->
+      <button type="submit">Отправить</button>
+    </form>
+    <div class="success-message" id="successMessage">Спасибо! Ссылка отправлена.</div>
+    <div class="error-message" id="errorMessage">Ошибка при отправке. Попробуйте позже.</div>
+  </div>
+
+  <script>
+    const form = document.getElementById('linkForm');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      successMessage.style.display = 'none';
+      errorMessage.style.display = 'none';
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json'
+          },
+          body: formData
+        });
+
+        if (response.ok) {
+          form.reset();
+          successMessage.style.display = 'block';
+        } else {
+          errorMessage.style.display = 'block';
+        }
+      } catch (error) {
+        errorMessage.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
