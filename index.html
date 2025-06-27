@@ -19,6 +19,15 @@
       background-position: center;
       background-repeat: no-repeat;
     }
+    .gif{
+      position: absolute;
+      left: 50%;
+      top: -60%;
+      transform: translateX(-50%);
+    }
+    .position-relative{
+      position: relative;
+    }
     .container {
       background: white;
       padding: 30px 40px;
@@ -78,7 +87,8 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container position-relative">
+    <img class="gif" src="https://media.tenor.com/kQjsTRbRQoYAAAAj/quby.gif" alt="dance-man">
     <h1>Скинь мне мемчик ссылкой</h1>
     <form id="linkForm" action="https://formspree.io/f/xkgbkglw" method="POST">
       <input
